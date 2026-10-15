@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="clock-container">
+        <h1> DIGITAL CLOCK </h1>
+        <div id="clock">00:00:00</div>
+        <p id="date"></p>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+
+            document.getElementById("clock").textContent =
+                now.toLocaleTimeString("en-IN", { hour12: true });
+
+            document.getElementById("date").textContent =
+                now.toLocaleDateString("en-IN", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                });
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
