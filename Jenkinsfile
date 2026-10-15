@@ -5,15 +5,25 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Mithun175/digital-clock.git'
+                checkout scm
             }
         }
 
-        stage('Run Digital Clock') {
+        stage('Deploy Website') {
             steps {
-                bat 'python --version'
-                bat 'python -u digital_clock.py'
+                bat '''
+                if not exist C:\\DigitalClockSite mkdir C:\\DigitalClockSite
+                xcopy /E /I /Y "%WORKSPACE%\\index.html" "C:\\DigitalClockSite\\"
+                xcopy /E /I /Y "%WORKSPACE%\\style.css" "C:\\DigitalClockSite\\"
+                '''
+            }
+        }
+
+        stage('Start Local Website') {
+            steps {
+                bat '''
+                powershell -NoProfile -ExecutionPolicy Bypass -Command "$listener = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue; if (-not $listener) { Start-Process -FilePath 'python' -ArgumentList '-m http.server 8000 --directory C:\\DigitalClockSite' -WindowStyle Hidden }"
+                '''
             }
         }
     }
