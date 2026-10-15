@@ -3,22 +3,18 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                echo 'Building Digital Clock Project'
+                git branch: 'main',
+                    url: 'https://github.com/Mithun175/digital-clock.git'
             }
         }
 
-        stage('Test') {
+        stage('Run Digital Clock') {
             steps {
-                echo 'Digital Clock project test successful'
+                bat 'python --version'
+                bat 'python -u digital_clock.py'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Digital Clock pipeline completed!'
         }
     }
 }
